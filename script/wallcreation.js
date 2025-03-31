@@ -2,12 +2,13 @@ import * as THREE from "three";
 import {wallEquation} from "./wall.js"
 import {camera} from "./setup.js"
 
+let globalidx = 0;
 function Wallaroundcube() {
     //create wall behind the equation
     let idx = 0;
     for (let x = 0; x < 12; x++) {
       for (let y = 0; y < 5; y++) {
-        wallEquation(x + 30, -17 + y, camera.position.z - 13, idx++);
+        wallEquation(x + 30, -17 + y, camera.position.z - 13, globalidx++);
       }
     }
   
@@ -19,7 +20,7 @@ function Wallaroundcube() {
           camera.position.x + 17,
           -17 + y,
           camera.position.z + 17 + x,
-          idx2++
+          globalidx++
         );
       }
     }
@@ -30,7 +31,7 @@ function Wallaroundcube() {
           camera.position.x + 17 + x,
           -17 + y,
           camera.position.z + 17,
-          idx3++
+          globalidx++
         );
       }
     }
@@ -41,7 +42,7 @@ function Wallaroundcube() {
           camera.position.x + 25,
           -17 + y,
           camera.position.z + 17 + x,
-          idx4++
+          globalidx++
         );
       }
     }
@@ -52,7 +53,7 @@ function Wallaroundcube() {
           camera.position.x + 17 + x,
           -17 + y,
           camera.position.z + 25,
-          idx5++
+          globalidx++
         );
       }
     }

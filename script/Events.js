@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import {checkcollision} from "./collision.js"
 import {camera} from "./setup.js"
+import {digwall} from "./digwall.js";
 
 const moveSpeed = 0.2;
 const moveTarget = new THREE.Vector3(); // Store the target position
@@ -39,6 +40,9 @@ window.addEventListener("keydown", (event) => {
       break;
     case "arrowdown": 
       tempMoveTarget.y -= 0.5; // Slightly decrease height
+      break;
+    case "q":
+      digwall();
       break;
   }
 
