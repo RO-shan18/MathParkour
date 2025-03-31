@@ -2,6 +2,7 @@ import * as THREE from "three";
 import {collidableobjects, actualresult, camera, scene} from "./setup.js";
 import {createNumberTexture, getRandomColor} from "./equation.js";
 
+const answercube = [];
 function generateanswercube() {
     let actualIndex = Math.floor(Math.random() * (3 * 2 * 2));
     let counter = 0;
@@ -29,6 +30,8 @@ function generateanswercube() {
             camera.position.z + 20 + z
           );
           scene.add(mesh);
+
+          answercube.push({mesh, color : `${color.getHexString()}`, number: randomresult})
   
           //bouding box for answercubes
           const boundingbox = new THREE.Box3().setFromObject(mesh);
@@ -39,3 +42,5 @@ function generateanswercube() {
   }
 
   generateanswercube();
+
+  export {answercube}

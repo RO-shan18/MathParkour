@@ -20,4 +20,18 @@
     color: white;
     font-family: Arial, sans-serif;
   }
+
+  .ui-answer {
+    padding: 10px; /* Add space inside the child */
+    border-radius: 5px; /* Optional: Rounded corners */
+    text-align: center; /* Center text */
+    font-weight: bold; /* Make text bold */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;  /* Adjust size to allow padding */
+    height: 80%;
+    box-sizing: border-box; /* Ensures padding doesn't overflow */
+}
+
   

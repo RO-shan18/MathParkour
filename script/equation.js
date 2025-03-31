@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import {collidableobjects, scene, getActualResult, setActualResult, camera} from "./setup.js";
 
+const equationCubes = []; 
 // Function to create texture with numbers
 function createNumberTexture(number) {
     const size = 256;
@@ -56,6 +57,7 @@ function createNumberTexture(number) {
   
   function createequationcube() {
     const equation = generateRandomEquation();
+    let questionCube = null;
   
     equation.forEach((term, index) => {
       const texture = createNumberTexture(term.toString());
@@ -69,17 +71,30 @@ function createNumberTexture(number) {
   
       const mesh = new THREE.Mesh(geometry, material);
       mesh.position.set(index * 1.1 + 32, -17, camera.position.z - 10);
+      console.log(mesh)
       scene.add(mesh);
+
+      console.log(`Created cube: ${term}`, mesh);
+
+      const cubeData = { mesh, color, number: term };
+      equationCubes.push(cubeData);
+
+      if (term === "?") {
+          questionCube = cubeData; // Store the '?' cube
+          console.log("Stored ? cube:", questionCube);
+      }
   
       //boundingbox for equation cube
       const boundingbox = new THREE.Box3().setFromObject(mesh);
       collidableobjects.push(boundingbox);
     });
+
+    return questionCube;
   }
 
 createequationcube();
 
-export {createNumberTexture, getRandomColor};
+export {createNumberTexture, getRandomColor, createequationcube, equationCubes};
 
 
   

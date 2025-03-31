@@ -2,12 +2,20 @@ import * as THREE from "three";
 import {checkcollision} from "./collision.js"
 import {camera} from "./setup.js"
 import {digwall} from "./digwall.js";
+import {movetoUI} from "./grabUI.js";
+import {replaceQuestionCubeWithLastUIValue} from "./modifyUI.js";
+import { updateScoreDisplay } from "./score.js";
 
 const moveSpeed = 0.2;
 const moveTarget = new THREE.Vector3(); // Store the target position
 moveTarget.copy(camera.position);
 
 // Event listener for movement input
+document.addEventListener("DOMContentLoaded", () => {
+  updateScoreDisplay();
+});
+
+
 window.addEventListener("keydown", (event) => {
   let tempMoveTarget = moveTarget.clone();
   const direction = new THREE.Vector3();
@@ -44,7 +52,13 @@ window.addEventListener("keydown", (event) => {
     case "q":
       digwall();
       break;
-  }
+    case "g":
+      movetoUI();
+      break;
+     case "f":
+      replaceQuestionCubeWithLastUIValue();
+      break;
+    }
 
   if(!checkcollision(tempMoveTarget)){
     moveTarget.copy(tempMoveTarget);
