@@ -3,7 +3,8 @@ import { collidableobjects, scene } from "./setup.js";
 
 let WallInstance;
 const boundingboxes = [];
-const maxInstances = 256;
+const maxInstances = 2000;
+const wallPositions = [];
 
 const wallGeometry = new THREE.BoxGeometry(1, 1, 1);
 const wallMaterial = new THREE.MeshBasicMaterial({ color: 0xaa4a44 });
@@ -18,6 +19,8 @@ function wallEquation(xpos, ypos, zpos, index) {
     WallInstance.setMatrixAt(index, dummy.matrix);
     WallInstance.instanceMatrix.needsUpdate = true;
 
+    wallPositions[index] = { x: xpos, y: ypos, z: zpos };
+
     // Store bounding box for collision detection
     const boundingbox = new THREE.Box3().setFromCenterAndSize(
         dummy.position.clone(),
@@ -28,4 +31,4 @@ function wallEquation(xpos, ypos, zpos, index) {
     boundingboxes[index] = boundingbox;  // Store at correct index
 }
 
-export { wallEquation, WallInstance, boundingboxes };
+export { wallEquation, WallInstance, boundingboxes, wallPositions};

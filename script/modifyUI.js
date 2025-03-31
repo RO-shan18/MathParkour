@@ -3,6 +3,7 @@ import { equationCubes } from "./equation.js";
 import { camera, getActualResult } from "./setup.js";
 import { increaseScore, decreaseScore } from "./score.js";
 import { showMessage } from "./message.js";
+import {lowerWalls } from "./wallcreation.js";
 
 function worldDistance(obj1, obj2) {
     return obj1.position.distanceTo(obj2.position);
@@ -21,7 +22,6 @@ function replaceQuestionCubeWithLastUIValue() {
     }
 
     if (!lastFilledBox) {
-        console.log("No filled UI box found!");
         return;
     }
 
@@ -30,27 +30,22 @@ function replaceQuestionCubeWithLastUIValue() {
     const lastColor = window.getComputedStyle(lastFilledBox.firstChild).backgroundColor;
 
     if (!lastValue || isNaN(lastValue)) {
-        console.log("Invalid value in UI box!");
         return;
     }
 
     // Find the '?' cube in the equation
     const questionCube = equationCubes.find(cube => cube.number === "?");
     if (!questionCube) {
-        console.log("No '?' cube found in equation!");
         return;
     }
 
     // Check if player is close to the '?' cube
     const distance = worldDistance(camera, questionCube.mesh);
-    console.log("Distance to '?':", distance);
 
     if (distance > 5) {
-        console.log("Player is too far from '?' cube.");
         return;
     }
 
-    console.log("Replacing '?' cube with:", lastValue);
 
     // Store previous '?' cube properties in case of reset
     const previousTexture = questionCube.mesh.material.map;
@@ -80,23 +75,20 @@ function replaceQuestionCubeWithLastUIValue() {
 
     // Remove last filled UI box content
     lastFilledBox.innerHTML = "";
-    console.log("Removed last UI box content.");
 
     // Validate the equation
-    validateEquation(questionCube, previousTexture, previousColor);
+    validateEquation(questionCube);
 }
 
-function validateEquation(questionCube, previousTexture, previousColor) {
+function validateEquation(questionCube) {
     const expectedResult = getActualResult();
-    console.log("Expected result:", expectedResult);
-    console.log("Player input:", questionCube.number);
 
     if (questionCube.number === expectedResult) {
-        console.log("You are right! Level 1 done.");
         increaseScore(10);
         showMessage("You are right! Level 1 done");
+        lowerWalls();
+        
     } else {
-        console.log("Wrong answer! Resetting...");
         decreaseScore(5);
         showMessage("Answer is wrong", true);
     }

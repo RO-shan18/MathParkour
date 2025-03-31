@@ -16,7 +16,7 @@ function movetoUI() {
     }
   });
 
-  if (!closestCube || closestDistance > 5) return; // Only grab if within 5 units
+  if (!closestCube) return;
 
   // Remove from Three.js scene
   scene.remove(closestCube.mesh);
@@ -37,7 +37,7 @@ function movetoUI() {
       const colorHex =
         closestCube.color instanceof THREE.Color
           ? `#${closestCube.color.getHexString()}`
-          : `#${closestCube.color}`;
+          : `#${closestCube.color}`
 
       div.style.backgroundColor = colorHex;
       div.className = "ui-answer";

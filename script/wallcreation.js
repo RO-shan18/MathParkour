@@ -1,19 +1,20 @@
 import * as THREE from "three";
-import {wallEquation} from "./wall.js"
-import {camera} from "./setup.js"
+import { wallEquation, wallPositions,WallInstance } from "./wall.js";
+import { camera, worldSize, scene } from "./setup.js";
 
 let globalidx = 0;
-function Wallaroundcube() {
-    //create wall behind the equation
-    let idx = 0;
-    for (let x = 0; x < 12; x++) {
-      for (let y = 0; y < 5; y++) {
-        wallEquation(x + 30, -17 + y, camera.position.z - 13, globalidx++);
-      }
+function wallbehindequationcube() {
+
+    for (let x = 0; x < worldSize; x++) {
+        for (let y = 0; y < 5; y++) {
+            wallEquation(x, -17 + y, camera.position.z - 13, globalidx++);
+        }
     }
-  
-    //create fourside wall around the answerblock
-    let idx2 = 0;
+}
+
+function Wallaroundanswercube() {
+
+  // Store all wall positions
     for (let x = 0; x < 8; x++) {
       for (let y = 0; y < 5; y++) {
         wallEquation(
@@ -24,7 +25,6 @@ function Wallaroundcube() {
         );
       }
     }
-    let idx3 = 0;
     for (let x = 0; x < 8; x++) {
       for (let y = 0; y < 5; y++) {
         wallEquation(
@@ -35,7 +35,7 @@ function Wallaroundcube() {
         );
       }
     }
-    let idx4 = 0;
+
     for (let x = 0; x < 8; x++) {
       for (let y = 0; y < 5; y++) {
         wallEquation(
@@ -46,7 +46,7 @@ function Wallaroundcube() {
         );
       }
     }
-    let idx5 = 0;
+
     for (let x = 0; x < 9; x++) {
       for (let y = 0; y < 5; y++) {
         wallEquation(
@@ -57,7 +57,37 @@ function Wallaroundcube() {
         );
       }
     }
+}
+
+function lowerWalls() {
+  if (wallPositions.length === 0) {
+      return;
   }
 
-  Wallaroundcube();
-  
+  let interval = setInterval(() => {
+      let allWallsDown = true;
+      const dummy = new THREE.Object3D();
+
+      wallPositions.forEach((pos, index) => {
+          if (pos.y > -40) {  
+              pos.y -= 0.5;
+              allWallsDown = false;
+          }
+
+          dummy.position.set(pos.x, pos.y, pos.z);
+          dummy.updateMatrix();
+          WallInstance.setMatrixAt(index, dummy.matrix);
+      });
+
+      WallInstance.instanceMatrix.needsUpdate = true; 
+
+      if (allWallsDown) {
+          clearInterval(interval);
+      }
+  }, 300);
+}
+
+wallbehindequationcube();
+Wallaroundanswercube();
+
+export { wallbehindequationcube, lowerWalls };

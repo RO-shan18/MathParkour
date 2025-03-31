@@ -12,8 +12,8 @@ function showMessage(text, restart = false) {
     messageDiv.style.top = "20px";  
     messageDiv.style.left = "50%";
     messageDiv.style.transform = "translateX(-50%)";
-    messageDiv.style.fontSize = "24px";
-    messageDiv.style.color = "black"; 
+    messageDiv.style.fontSize = "30px";
+    messageDiv.style.color = "blue"; 
     messageDiv.style.fontWeight = "bold";
     messageDiv.style.zIndex = "1000";
 
@@ -21,11 +21,11 @@ function showMessage(text, restart = false) {
         setTimeout(() => {
             messageDiv.innerText = "";
             restartGame();
-        }, 2000);
+        }, 5000);
     } else {
         setTimeout(() => {
             messageDiv.innerText = "";
-        }, 3000);
+        }, 5000);
     }
 }
 
