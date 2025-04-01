@@ -43,4 +43,4 @@ function generateanswercube() {
 
   generateanswercube();
 
-  export {answercube}
+  export {answercube, generateanswercube}

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import {collidableobjects, scene, worldSize} from "./setup.js"
+import {collidableobjects, scene, getWorldSize} from "./setup.js"
 
 let treeModels = [];
 let treePaths = [
@@ -70,7 +70,9 @@ const Loader = new GLTFLoader();
 const textureLoader = new THREE.TextureLoader();
 
 //load trees using gltf loader
-function LoadModel() {
+function LoadModel(oldz, newz) {
+  const worldSize = getWorldSize(); 
+
   treePaths.forEach((path) => {
     Loader.load(
       `/Assets/Trees_GLTF/${path}.glb`,
@@ -83,7 +85,7 @@ function LoadModel() {
         tree.position.set(
           Math.random() * worldSize,
           -17,
-          Math.random() * worldSize
+          Math.random() * (oldz - newz) + newz,
         );
 
         //bounding box for tree
@@ -135,5 +137,6 @@ function LoadModel() {
   });
 }
 
-
 LoadModel();
+
+export {LoadModel};

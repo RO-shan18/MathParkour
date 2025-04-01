@@ -3,7 +3,8 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 const minHeight = -17;
 let actualresult = 0;
 let collidableobjects = [];
-const worldSize = 200;
+let worldSize = 200;
+let z_cord = 100;
 
 export function getActualResult() {
   return actualresult;
@@ -11,6 +12,18 @@ export function getActualResult() {
 
 export function setActualResult(value) {
   actualresult = value;
+}
+
+export function getWorldSize() {
+  return worldSize;
+}
+
+export function getZCord() {
+  return z_cord;
+}
+
+export function setZCord(value) {
+  z_cord = value;
 }
 
 // Scene setup
@@ -47,5 +60,5 @@ const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 directionalLight.position.set(10, 10, 10);
 scene.add(directionalLight);
 
-export {minHeight, collidableobjects, camera, renderer, scene, worldSize, actualresult};
+export {minHeight, collidableobjects, camera, renderer, scene, worldSize, actualresult, z_cord};
 

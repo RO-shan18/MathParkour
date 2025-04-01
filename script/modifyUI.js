@@ -1,9 +1,12 @@
 import * as THREE from "three";
-import { equationCubes } from "./equation.js";
+import { createequationcube, equationCubes } from "./equation.js";
 import { camera, getActualResult } from "./setup.js";
 import { increaseScore, decreaseScore } from "./score.js";
 import { showMessage } from "./message.js";
-import {lowerWalls } from "./wallcreation.js";
+import {lowerWalls,  Wallaroundanswercube, wallbehindequationcube } from "./wallcreation.js";
+import { createWorld } from "./world.js";
+import { generateanswercube } from "./answer.js";
+import { removeanswercubes, removeequationcube } from "./removeequation.js";
 
 function worldDistance(obj1, obj2) {
     return obj1.position.distanceTo(obj2.position);
@@ -47,10 +50,6 @@ function replaceQuestionCubeWithLastUIValue() {
     }
 
 
-    // Store previous '?' cube properties in case of reset
-    const previousTexture = questionCube.mesh.material.map;
-    const previousColor = questionCube.mesh.material.color.clone();
-
     // Update the texture of the '?' cube
     const size = 256;
     const canvas = document.createElement("canvas");
@@ -82,16 +81,39 @@ function replaceQuestionCubeWithLastUIValue() {
 
 function validateEquation(questionCube) {
     const expectedResult = getActualResult();
-
+  
     if (questionCube.number === expectedResult) {
         increaseScore(10);
-        showMessage("You are right! Level 1 done");
-        lowerWalls();
-        
+        showMessage("You are right! ");
+        lowerWalls();  
+
+        setTimeout(() => {
+            removeequationcube(); 
+            removeanswercubes();
+            createWorld();  
+        }, 2000);
+         
+        setTimeout(()=>{
+            // upperWalls();
+            createequationcube();  
+            generateanswercube();    
+            wallbehindequationcube();
+            Wallaroundanswercube();
+            
+        }, 5000)
+         
+
     } else {
         decreaseScore(5);
         showMessage("Answer is wrong", true);
     }
+  }
+  
+
+function clearUIBoxes(){
+    const uiBoxes = document.querySelectorAll(".ui-box");
+
+    uiBoxes.forEach(box => box.innerHTML = "");
 }
 
-export { replaceQuestionCubeWithLastUIValue };
+export { replaceQuestionCubeWithLastUIValue, clearUIBoxes};

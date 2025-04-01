@@ -71,17 +71,13 @@ function createNumberTexture(number) {
   
       const mesh = new THREE.Mesh(geometry, material);
       mesh.position.set(index * 1.1 + 32, -17, camera.position.z - 10);
-      console.log(mesh)
       scene.add(mesh);
-
-      console.log(`Created cube: ${term}`, mesh);
 
       const cubeData = { mesh, color, number: term };
       equationCubes.push(cubeData);
 
       if (term === "?") {
           questionCube = cubeData; // Store the '?' cube
-          console.log("Stored ? cube:", questionCube);
       }
   
       //boundingbox for equation cube
