@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { answercube } from "./answer.js";
-import { scene, camera, collidableobjects } from "./setup.js";
+import { scene, camera, collidableobjects, setplayercontrol } from "./setup.js";
 
 function movetoUI() {
   if (answercube.length === 0) return;
@@ -16,7 +16,9 @@ function movetoUI() {
       closestDistance = distance;
       closestCube = cube;
       closestIndex = index;
+      setplayercontrol("grab"); 
     }
+
   });
 
   // If no closest cube is found or it is out of range, return

@@ -122,7 +122,7 @@ function createNumberTexture(number) {
       });
   
       const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(index * 1.1 + 32, -17, camera.position.z - 10);
+      mesh.position.set(index * 1.1 + 32, -17, camera.position.z - 5);
       scene.add(mesh);
 
       const cubeData = { mesh, color, number: term };

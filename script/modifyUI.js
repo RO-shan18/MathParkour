@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { createequationcube, equationCubes } from "./equation.js";
-import { camera, getActualResult } from "./setup.js";
+import { camera, getActualResult, getZCord, setplayercontrol } from "./setup.js";
 import { increaseScore, decreaseScore } from "./score.js";
 import { showMessage } from "./message.js";
 import {lowerWalls,  Wallaroundanswercube, wallbehindequationcube, removeWalls } from "./wallcreation.js";
@@ -45,7 +45,8 @@ function replaceQuestionCubeWithLastUIValue() {
     // Check if player is close to the '?' cube
     const distance = worldDistance(camera, questionCube.mesh);
 
-    if (distance > 5) {
+    if (distance > 3) {
+       setplayercontrol("")
         return;
     }
 
@@ -89,7 +90,6 @@ function validateEquation(questionCube) {
         setTimeout(() => {
             removeequationcube(); 
             removeanswercubes();
-            createWorld();
             removeWalls();
         }, 2000);
          

@@ -3,8 +3,17 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 const minHeight = -16.5;
 let actualresult = 0;
 let collidableobjects = [];
-let worldSize = 200;
-let z_cord = 100;
+let worldSize = 100;
+let z_cord = 50;
+let playercontrol = "sdfsdf";
+
+export function getplayercontrol() {
+  return playercontrol;
+}
+
+export function setplayercontrol(value) {
+  playercontrol = value;
+}
 
 export function getActualResult() {
   return actualresult;
@@ -46,6 +55,7 @@ camera.lookAt(0, 0, 0);
 const renderer =  new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 // Controls setup
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -56,8 +66,9 @@ controls.dampingFactor = 0.25;
 const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-directionalLight.position.set(10, 10, 10);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+directionalLight.position.set(50, 100, camera.position.z + 60);
+directionalLight.castShadow = true;
 scene.add(directionalLight);
 
 export {minHeight, collidableobjects, camera, renderer, scene, worldSize, actualresult, z_cord};

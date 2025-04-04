@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { boundingboxes, WallInstance } from "./wall.js";
-import { collidableobjects, camera } from "./setup.js";
+import { collidableobjects, camera, setplayercontrol } from "./setup.js";
 
 function findClosestWall() {
     let closestIndex = -1;
@@ -27,7 +27,9 @@ function findClosestWall() {
             if (distance < closestDistance && distance <= 1.5 && angle > 0.8) {
                 closestDistance = distance;
                 closestIndex = index;
+                setplayercontrol("dig")
             }
+
         }
     });
 
@@ -52,7 +54,8 @@ function digwall() {
     dummy.updateMatrix();
     WallInstance.setMatrixAt(index, dummy.matrix);
     WallInstance.instanceMatrix.needsUpdate = true;
+
 }
 
 
-export { digwall };
+export { digwall, findClosestWall };

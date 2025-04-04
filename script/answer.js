@@ -25,9 +25,9 @@ function generateanswercube() {
         });
         const mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(
-          camera.position.x + 20 + x,
+          camera.position.x + 16 + x,
           -17 + y,
-          camera.position.z + 20 + z
+          camera.position.z + 13 + z
         );
         scene.add(mesh);
 

@@ -4,7 +4,7 @@ import { LoadModel } from "./model.js";
 
 const textureLoader = new THREE.TextureLoader();
 const groundTexture = textureLoader.load(
-  "/Assets/Textures/grass.png");
+  "/Assets/Textures/grass.jpg");
 
 groundTexture.wrapS = THREE.RepeatWrapping;
 groundTexture.wrapT = THREE.RepeatWrapping;
@@ -15,7 +15,7 @@ groundTexture.encoding = THREE.sRGBEncoding;
 function createWorld(){
   const worldSize = getWorldSize();
   const oldz = getZCord();
-  const newz = oldz - 100;
+  const newz = oldz - 50;
 
     const geometry = new THREE.BoxGeometry(1, 5, 1);
     const material = new THREE.MeshBasicMaterial({ map: groundTexture});
@@ -25,7 +25,7 @@ function createWorld(){
     const dummy = new THREE.Object3D();
     let index = 0;
     for (let x = 0; x < worldSize; x++) {
-      for (let z = newz; z < oldz + 100 ; z++) {
+      for (let z = newz; z < oldz + 50 ; z++) {
         dummy.position.set(x, -20, z);
         dummy.updateMatrix();
         mesh.setMatrixAt(index++, dummy.matrix);
@@ -34,7 +34,7 @@ function createWorld(){
     }
     mesh.instanceMatrix.needsUpdate = true;
 
-     LoadModel(oldz+100, newz);
+     LoadModel(oldz+50, newz);
      // Update values through setters
      setZCord(newz);
 }

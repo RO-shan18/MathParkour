@@ -5,9 +5,9 @@ import { clearUIBoxes } from "./modifyUI.js";
 
 function wallbehindequationcube() {
   let globalidx = 0;
-  for (let x = 0; x < worldSize; x++) {
+  for (let x = 0; x < worldSize+33; x++) {
     for (let y = 0; y < 5; y++) {
-      wallEquation(x-34, -17 + y, camera.position.z - 13, globalidx++);
+      wallEquation(x-33, -17 + y, camera.position.z - 7, globalidx++);
     }
   }
 }
@@ -19,9 +19,9 @@ function Wallaroundanswercube() {
   for (let x = 0; x < 8; x++) {
     for (let y = 0; y < 5; y++) {
       wallEquation(
-        camera.position.x + 17,
+        camera.position.x + 13,
         -17 + y,
-        camera.position.z + 17 + x,
+        camera.position.z + 10 + x,
         globalidx2++
       );
     }
@@ -29,9 +29,9 @@ function Wallaroundanswercube() {
   for (let x = 0; x < 8; x++) {
     for (let y = 0; y < 5; y++) {
       wallEquation(
-        camera.position.x + 17 + x,
+        camera.position.x + 13 + x,
         -17 + y,
-        camera.position.z + 17,
+        camera.position.z + 10,
         globalidx2++
       );
     }
@@ -40,9 +40,9 @@ function Wallaroundanswercube() {
   for (let x = 0; x < 8; x++) {
     for (let y = 0; y < 5; y++) {
       wallEquation(
-        camera.position.x + 25,
+        camera.position.x + 21,
         -17 + y,
-        camera.position.z + 17 + x,
+        camera.position.z + 10 + x,
         globalidx2++
       );
     }
@@ -51,9 +51,9 @@ function Wallaroundanswercube() {
   for (let x = 0; x < 9; x++) {
     for (let y = 0; y < 5; y++) {
       wallEquation(
-        camera.position.x + 17 + x,
+        camera.position.x + 13 + x,
         -17 + y,
-        camera.position.z + 25,
+        camera.position.z + 18,
         globalidx2++
       );
     }

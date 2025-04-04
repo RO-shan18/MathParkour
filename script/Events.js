@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { checkcollision } from "./collision.js";
-import { camera } from "./setup.js";
-import { digwall } from "./digwall.js";
+import { camera, getplayercontrol, setplayercontrol} from "./setup.js";
+import { digwall, findClosestWall } from "./digwall.js";
 import { movetoUI } from "./grabUI.js";
 import { replaceQuestionCubeWithLastUIValue } from "./modifyUI.js";
 import { updateScoreDisplay } from "./score.js";
@@ -10,7 +10,7 @@ const moveSpeed = 0.1;
 const moveTarget = new THREE.Vector3();
 moveTarget.copy(camera.position);
 
-const keys = {}; 
+const keys = {};
 let isMouseLocked = false;
 let isMouseHeld = false;
 
@@ -18,6 +18,7 @@ let isMouseHeld = false;
 document.addEventListener("DOMContentLoaded", () => {
   updateScoreDisplay();
 });
+
 
 // Hide instructions on Enter key
 document.addEventListener("keydown", function (event) {
@@ -31,20 +32,25 @@ window.addEventListener("keydown", (event) => {
   if (keys[key]) return; // Ignore if key is already held
 
   keys[key] = true; // Mark key as pressed
-
-  if (key === "f") {
-      console.log("F key pressed - replacing cube");
-      replaceQuestionCubeWithLastUIValue();
-  }
-
-  if (key === "g") {
-      console.log("G key pressed - moving UI element");
-      movetoUI();
-  }
-
   if (key === "q") {
-      console.log("Q key pressed - digging wall");
+    findClosestWall();
+    movetoUI();
+    replaceQuestionCubeWithLastUIValue();
+
+    if(getplayercontrol() === "dig"){
+      setplayercontrol("dig");
       digwall();
+    }
+
+    if(getplayercontrol() === "grab"){
+      setplayercontrol("grab")
+      movetoUI();
+    }
+
+    if(getplayercontrol() === "put"){
+      setplayercontrol("put")
+      replaceQuestionCubeWithLastUIValue();
+    }
   }
 });
 
@@ -78,7 +84,8 @@ document.addEventListener("click", (event) => {
 
 // Capture mouse movement only when pointer is locked and mouse is not held
 document.addEventListener("mousemove", (event) => {
-  if (isMouseLocked && !isMouseHeld) { // Ignore movement if mouse is held
+  if (isMouseLocked && !isMouseHeld) {
+    // Ignore movement if mouse is held
     const sensitivity = 0.002;
     camera.rotation.y -= event.movementX * sensitivity; // Horizontal rotation
 
