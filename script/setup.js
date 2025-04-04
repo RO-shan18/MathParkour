@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-const minHeight = -17;
+const minHeight = -16.5;
 let actualresult = 0;
 let collidableobjects = [];
 let worldSize = 200;

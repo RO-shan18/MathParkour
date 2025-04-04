@@ -1,7 +1,10 @@
 import * as THREE from "three";
-import {collidableobjects, scene, getActualResult, setActualResult, camera} from "./setup.js";
+import {collidableobjects, scene, setActualResult, camera} from "./setup.js";
 
 const equationCubes = []; 
+let operationIndex = 0; // Tracks the level progression
+
+const operationSequence = ["+", "+", "-", "-", "*", "*", "/", "/"]; // Repeating pattern
 // Function to create texture with numbers
 function createNumberTexture(number) {
     const size = 256;
@@ -24,45 +27,94 @@ function createNumberTexture(number) {
     return new THREE.CanvasTexture(canvas);
   }
   
+
   function generateRandomEquation() {
-    const operators = ["+", "-", "*", "/"];
-    let num1 = Math.floor(Math.random() * 10) + 1;
-    let num2 = Math.floor(Math.random() * 10) + 1;
-    const operator = operators[Math.floor(Math.random() * operators.length)];
-    const equals = "=";
-    const result = "?";
+    let numOperands = 2; 
+    let numbers = [];
+    let equationStr = "";
+    
+  
+    let fixedOperators = ["+", "-", "*", "/"];
+    let operatorIndex = operationIndex % fixedOperators.length; 
+    let operator = fixedOperators[operatorIndex]; 
+    operationIndex++; 
+
+
+    let num1, num2;
+    if (operator === "/") {
+        num2 = Math.floor(Math.random() * 9) + 1; 
+        num1 = num2 * (Math.floor(Math.random() * 9) + 1); 
+    } else {
+        num1 = Math.floor(Math.random() * 10) + 1;
+        num2 = Math.floor(Math.random() * 10) + 1;
+    }
+
+    numbers.push(num1, num2);
+    equationStr = `${num1} ${operator} ${num2}`;
+
+    if (operationIndex >= 6) {
+        numOperands = Math.min(3 + Math.floor(operationIndex / 4), 5); 
+        let availableOperators = ["+", "-", "*", "/"];
+
+        for (let i = 2; i < numOperands; i++) {
+            let nextOperator = availableOperators[Math.floor(Math.random() * availableOperators.length)];
+            let nextNumber = Math.floor(Math.random() * 10) + 1;
+
+            if (nextOperator === "/") {
+                nextNumber = Math.floor(Math.random() * 9) + 1;
+            }
+
+            equationStr += ` ${nextOperator} ${nextNumber}`;
+            numbers.push(nextNumber);
+        }
+    }
+
+    if (operationIndex >= 10) {
+        equationStr = `(${numbers[0]} ${operator} ${numbers[1]})`;
+        for (let i = 2; i < numbers.length; i++) {
+            let nextOperator = ["+", "-", "*", "/"][Math.floor(Math.random() * 4)];
+            equationStr = `(${equationStr} ${nextOperator} ${numbers[i]})`;
+        }
+    }
 
     let actualValue;
-  
-    if (operator === "+") {
-      actualValue = num1 + num2;
-    } else if (operator === "-") {
-      actualValue = num1 - num2;
-    } else if (operator === "*") {
-      actualValue = num1 * num2;
-    } else if (operator === "/") {
-      actualValue = num1 / num2;
+    try {
+        actualValue = eval(equationStr); 
+    } catch (e) {
+        actualValue = null; 
+    }
+
+    if (actualValue === null || isNaN(actualValue)) {
+        return generateRandomEquation(); 
     }
 
     setActualResult(actualValue);
-  
-    const equation = [num1, operator, num2, equals, result];
-  
-    return equation;
-  }
+    
+    return equationStr.split(" ").concat("=", "?"); 
+}
+
   
   function getRandomColor() {
-    return "#" + Math.floor(Math.random() * 16777215).toString(16); // Generate random hex color
+    return "#" + Math.floor(Math.random() * 16777215).toString(16); 
   }
+
+  function clearOldEquations() {
+    equationCubes.forEach(cubeData => {
+        scene.remove(cubeData.mesh);
+    });
+    
+    collidableobjects.length = 0;
+    equationCubes.length = 0;
+}
   
   function createequationcube() {
+    clearOldEquations();
     const equation = generateRandomEquation();
     let questionCube = null;
   
     equation.forEach((term, index) => {
       const texture = createNumberTexture(term.toString());
       const color = new THREE.Color(getRandomColor());
-  
       const geometry = new THREE.BoxGeometry(1, 1, 1);
       const material = new THREE.MeshBasicMaterial({
         map: texture,
@@ -77,7 +129,7 @@ function createNumberTexture(number) {
       equationCubes.push(cubeData);
 
       if (term === "?") {
-          questionCube = cubeData; // Store the '?' cube
+          questionCube = cubeData; 
       }
   
       //boundingbox for equation cube

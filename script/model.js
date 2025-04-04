@@ -70,7 +70,7 @@ const Loader = new GLTFLoader();
 const textureLoader = new THREE.TextureLoader();
 
 //load trees using gltf loader
-function LoadModel(oldz, newz) {
+function LoadModel(newz, oldz) {
   const worldSize = getWorldSize(); 
 
   treePaths.forEach((path) => {

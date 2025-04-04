@@ -34,4 +34,23 @@
     box-sizing: border-box; /* Ensures padding doesn't overflow */
 }
 
+#instructions {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  font-size: 20px;
+  text-align: left;
+  z-index: 100;
+}
+
+#instructions:first-child{
+  text-align: center;
+}
+
+
   

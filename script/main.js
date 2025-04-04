@@ -1,4 +1,3 @@
-
 import "./setup.js";
 import "./world.js";
 import "./model.js";
@@ -10,4 +9,9 @@ import "./collision.js";
 import "./UI.js";
 import "./Events.js";
 import "./animation.js";
-
+import "./digwall.js";
+import "./grabUI.js";
+import "./message.js";
+import "./modifyUI.js";
+import "./removeequation.js";
+import "./score.js";

@@ -3,10 +3,10 @@ import { createequationcube, equationCubes } from "./equation.js";
 import { camera, getActualResult } from "./setup.js";
 import { increaseScore, decreaseScore } from "./score.js";
 import { showMessage } from "./message.js";
-import {lowerWalls,  Wallaroundanswercube, wallbehindequationcube } from "./wallcreation.js";
-import { createWorld } from "./world.js";
+import {lowerWalls,  Wallaroundanswercube, wallbehindequationcube, removeWalls } from "./wallcreation.js";
 import { generateanswercube } from "./answer.js";
 import { removeanswercubes, removeequationcube } from "./removeequation.js";
+import { createWorld} from "./world.js";
 
 function worldDistance(obj1, obj2) {
     return obj1.position.distanceTo(obj2.position);
@@ -49,7 +49,6 @@ function replaceQuestionCubeWithLastUIValue() {
         return;
     }
 
-
     // Update the texture of the '?' cube
     const size = 256;
     const canvas = document.createElement("canvas");
@@ -90,16 +89,15 @@ function validateEquation(questionCube) {
         setTimeout(() => {
             removeequationcube(); 
             removeanswercubes();
-            createWorld();  
+            createWorld();
+            removeWalls();
         }, 2000);
          
         setTimeout(()=>{
-            // upperWalls();
-            createequationcube();  
-            generateanswercube();    
+            createequationcube(); 
             wallbehindequationcube();
             Wallaroundanswercube();
-            
+            generateanswercube();    
         }, 5000)
          
 
