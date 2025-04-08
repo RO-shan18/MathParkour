@@ -21,7 +21,7 @@ export function initWalls() {
 
   if (!wallTexture) {
     const textureLoader = new THREE.TextureLoader();
-    wallTexture = textureLoader.load("Assets/textures/wall.jpg");
+    wallTexture = textureLoader.load("Assets/textures/wall.png");
     wallTexture.wrapS = THREE.RepeatWrapping;
     wallTexture.wrapT = THREE.RepeatWrapping;
     wallTexture.repeat.set(1, 1);

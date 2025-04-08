@@ -5,7 +5,7 @@ import { clearUIBoxes } from "./modifyUI.js";
 
 function wallbehindequationcube() {
   let globalidx = 0;
-  for (let x = 0; x < worldSize+33; x++) {
+  for (let x = 0; x < worldSize+8; x++) {
     for (let y = 0; y < 5; y++) {
       wallEquation(x-33, -17 + y, camera.position.z - 7, globalidx++);
     }
@@ -19,7 +19,7 @@ function Wallaroundanswercube() {
   for (let x = 0; x < 8; x++) {
     for (let y = 0; y < 5; y++) {
       wallEquation(
-        camera.position.x + 13,
+        camera.position.x - 4,
         -17 + y,
         camera.position.z + 10 + x,
         globalidx2++
@@ -29,7 +29,7 @@ function Wallaroundanswercube() {
   for (let x = 0; x < 8; x++) {
     for (let y = 0; y < 5; y++) {
       wallEquation(
-        camera.position.x + 13 + x,
+        camera.position.x +  (x - 4),
         -17 + y,
         camera.position.z + 10,
         globalidx2++
@@ -40,7 +40,7 @@ function Wallaroundanswercube() {
   for (let x = 0; x < 8; x++) {
     for (let y = 0; y < 5; y++) {
       wallEquation(
-        camera.position.x + 21,
+        camera.position.x + 4,
         -17 + y,
         camera.position.z + 10 + x,
         globalidx2++
@@ -51,7 +51,7 @@ function Wallaroundanswercube() {
   for (let x = 0; x < 9; x++) {
     for (let y = 0; y < 5; y++) {
       wallEquation(
-        camera.position.x + 13 + x,
+        camera.position.x + (x-4),
         -17 + y,
         camera.position.z + 18,
         globalidx2++
@@ -61,9 +61,7 @@ function Wallaroundanswercube() {
 }
 
 function lowerWalls() {
-  if (!WallInstance || wallPositions.length === 0) {
-    return;
-  }
+  if (!WallInstance || wallPositions.length === 0) return;
 
   let interval = setInterval(() => {
     if (!WallInstance) {
@@ -99,12 +97,21 @@ function lowerWalls() {
 
     if (allWallsDown) {
       clearInterval(interval);
+
+      // Final hard cleanup
+      for (let i = 0; i < boundingboxes.length; i++) {
+        const boxIndex = collidableobjects.indexOf(boundingboxes[i]);
+        if (boxIndex !== -1) {
+          collidableobjects.splice(boxIndex, 1);
+        }
+      }
+      boundingboxes.length = 0;
     }
   }, 300);
 }
 
-function removeWalls() {
-  initWalls(); 
+
+function removeWalls() { 
   fullCleanup();
 
   setTimeout(() => {

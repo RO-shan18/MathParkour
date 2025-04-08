@@ -29,69 +29,134 @@ function createNumberTexture(number) {
   
 
   function generateRandomEquation() {
-    let numOperands = 2; 
-    let numbers = [];
+    const op = ["+", "-", "*", "/"];
     let equationStr = "";
-    
+    let numbers = [];
+    let level = operationIndex++;
+
+    function getRandomNum() {
+        return Math.floor(Math.random() * 9) + 1;
+    }
+
+    function getSafeDivPair() {
+      const b = getRandomNum();
+      const a = b * getRandomNum(); 
+      return [a, b];
+  }
   
-    let fixedOperators = ["+", "-", "*", "/"];
-    let operatorIndex = operationIndex % fixedOperators.length; 
-    let operator = fixedOperators[operatorIndex]; 
-    operationIndex++; 
 
-
-    let num1, num2;
-    if (operator === "/") {
-        num2 = Math.floor(Math.random() * 9) + 1; 
-        num1 = num2 * (Math.floor(Math.random() * 9) + 1); 
-    } else {
-        num1 = Math.floor(Math.random() * 10) + 1;
-        num2 = Math.floor(Math.random() * 10) + 1;
-    }
-
-    numbers.push(num1, num2);
-    equationStr = `${num1} ${operator} ${num2}`;
-
-    if (operationIndex >= 6) {
-        numOperands = Math.min(3 + Math.floor(operationIndex / 4), 5); 
-        let availableOperators = ["+", "-", "*", "/"];
-
-        for (let i = 2; i < numOperands; i++) {
-            let nextOperator = availableOperators[Math.floor(Math.random() * availableOperators.length)];
-            let nextNumber = Math.floor(Math.random() * 10) + 1;
-
-            if (nextOperator === "/") {
-                nextNumber = Math.floor(Math.random() * 9) + 1;
-            }
-
-            equationStr += ` ${nextOperator} ${nextNumber}`;
-            numbers.push(nextNumber);
-        }
-    }
-
-    if (operationIndex >= 10) {
-        equationStr = `(${numbers[0]} ${operator} ${numbers[1]})`;
-        for (let i = 2; i < numbers.length; i++) {
-            let nextOperator = ["+", "-", "*", "/"][Math.floor(Math.random() * 4)];
-            equationStr = `(${equationStr} ${nextOperator} ${numbers[i]})`;
-        }
-    }
+    // Level 0–3: Single operators
+    if (level < 4) {
+      const operator = op[level];
+      let a, b;
+      if (operator === "/") {
+          [a, b] = getSafeDivPair();
+      } else {
+          a = getRandomNum();
+          b = getRandomNum();
+      }
+      equationStr = `${a} ${operator} ${b}`;
+      numbers = [a, b];
+  }
+  
+    // Level 4–7: Double same operator
+    else if (level < 8) {
+      const operator = op[level - 4];
+      let a, b, c;
+      if (operator === "/") {
+          [a, b] = getSafeDivPair();
+          let tempResult = a / b;
+          [c, b] = getSafeDivPair(); // c / b will be valid
+          a = tempResult * b;
+          equationStr = `(${a} ${operator} ${b}) ${operator} ${c}`;
+      } else {
+          [a, b, c] = [getRandomNum(), getRandomNum(), getRandomNum()];
+          equationStr = `${a} ${operator} ${b} ${operator} ${c}`;
+      }
+      numbers = [a, b, c];
+  }
+  
+    // Level 8–11: Mixed double operators
+    else if (level < 12) {
+      let a = getRandomNum(), b = getRandomNum(), c = getRandomNum();
+      let operator1 = op[Math.floor(Math.random() * 4)];
+      let operator2 = op[Math.floor(Math.random() * 4)];
+  
+      if (operator1 === "/") [a, b] = getSafeDivPair();
+      if (operator2 === "/") [b, c] = getSafeDivPair(); // ensures clean division even for middle operand
+  
+      equationStr = `${a} ${operator1} ${b} ${operator2} ${c}`;
+      numbers = [a, b, c];
+  }
+  
+    // Level 12–15: Triple same operator with brackets
+    else if (level < 16) {
+      const operator = op[(level - 12) % 4];
+      let a, b, c, d;
+  
+      if (operator === "/") {
+          [a, b] = getSafeDivPair();
+          let temp1 = a / b;
+          [c, d] = getSafeDivPair();
+          let temp2 = c / d;
+          a = temp1 * d;
+          b = d;
+          c = temp2 * getRandomNum();
+          d = getRandomNum();
+      } else {
+          [a, b, c, d] = [getRandomNum(), getRandomNum(), getRandomNum(), getRandomNum()];
+      }
+  
+      equationStr = `((${a} ${operator} ${b}) ${operator} ${c}) ${operator} ${d}`;
+      numbers = [a, b, c, d];
+  }
+  
+    // Level 16–19: Triple mixed with brackets
+    else if (level < 20) {
+      let a = getRandomNum(), b = getRandomNum(), c = getRandomNum(), d = getRandomNum();
+      let ops = [];
+      for (let i = 0; i < 3; i++) {
+          ops.push(op[Math.floor(Math.random() * 4)]);
+      }
+  
+      if (ops[0] === "/") [a, b] = getSafeDivPair();
+      if (ops[1] === "/") [b, c] = getSafeDivPair();
+      if (ops[2] === "/") [c, d] = getSafeDivPair();
+  
+      equationStr = `((${a} ${ops[0]} ${b}) ${ops[1]} ${c}) ${ops[2]} ${d}`;
+      numbers = [a, b, c, d];
+  }
+  
+    // Level 20+: Four mixed ops with brackets (loop)
+    else {
+      let [a, b, c, d, e] = [getRandomNum(), getRandomNum(), getRandomNum(), getRandomNum(), getRandomNum()];
+      let ops = op.map((o, i) => {
+          if (o === "/") {
+              [a, b] = getSafeDivPair();
+          }
+          return o;
+      });
+  
+      equationStr = `(((${a} ${ops[0]} ${b}) ${ops[1]} ${c}) ${ops[2]} ${d}) ${ops[3]} ${e}`;
+      numbers = [a, b, c, d, e];
+  }
+  
 
     let actualValue;
     try {
-        actualValue = eval(equationStr); 
-    } catch (e) {
-        actualValue = null; 
+        actualValue = eval(equationStr);
+    } catch {
+        return generateRandomEquation(); // Retry on failure
     }
 
     if (actualValue === null || isNaN(actualValue)) {
-        return generateRandomEquation(); 
+        return generateRandomEquation();
     }
 
     setActualResult(actualValue);
-    
-    return equationStr.split(" ").concat("=", "?"); 
+    return equationStr.split(" ").concat("=", "?");
 }
+
 
   
   function getRandomColor() {
@@ -122,7 +187,7 @@ function createNumberTexture(number) {
       });
   
       const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(index * 1.1 + 32, -17, camera.position.z - 5);
+      mesh.position.set(index * 1.1 + 10, -17, camera.position.z - 5);
       scene.add(mesh);
 
       const cubeData = { mesh, color, number: term };

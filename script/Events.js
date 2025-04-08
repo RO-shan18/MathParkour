@@ -29,44 +29,43 @@ document.addEventListener("keydown", function (event) {
 
 window.addEventListener("keydown", (event) => {
   const key = event.key.toLowerCase();
-  if (keys[key]) return; // Ignore if key is already held
+  if (keys[key]) return; 
 
-  keys[key] = true; // Mark key as pressed
+  keys[key] = true; 
   if (key === "q") {
     findClosestWall();
-    movetoUI();
-    replaceQuestionCubeWithLastUIValue();
-
     if(getplayercontrol() === "dig"){
-      setplayercontrol("dig");
+      setplayercontrol("dig")
       digwall();
-    }
+    };
 
+    movetoUI()
     if(getplayercontrol() === "grab"){
       setplayercontrol("grab")
       movetoUI();
-    }
+    };
 
+    replaceQuestionCubeWithLastUIValue();
     if(getplayercontrol() === "put"){
-      setplayercontrol("put")
+      setplayercontrol("put");
       replaceQuestionCubeWithLastUIValue();
     }
   }
 });
 
 window.addEventListener("keyup", (event) => {
-  keys[event.key.toLowerCase()] = false; // Reset key on release
+  keys[event.key.toLowerCase()] = false;
 });
 
 // Prevent default drag behavior when clicking
 document.addEventListener("mousedown", (event) => {
-  event.preventDefault(); // Stops drag selection
-  isMouseHeld = true; // Mark mouse as held
+  event.preventDefault();
+  isMouseHeld = true; 
 });
 
 // Detect when mouse button is released
 document.addEventListener("mouseup", () => {
-  isMouseHeld = false; // Allow movement again
+  isMouseHeld = false; 
 });
 
 // Enable or disable mouse movement based on pointer lock state
@@ -78,7 +77,8 @@ document.addEventListener("pointerlockchange", () => {
 document.addEventListener("click", (event) => {
   if (!isMouseLocked) {
     document.body.requestPointerLock();
-    event.preventDefault(); // Prevents accidental dragging
+    event.preventDefault(); 
+    
   }
 });
 
@@ -86,8 +86,11 @@ document.addEventListener("click", (event) => {
 document.addEventListener("mousemove", (event) => {
   if (isMouseLocked && !isMouseHeld) {
     // Ignore movement if mouse is held
-    const sensitivity = 0.002;
-    camera.rotation.y -= event.movementX * sensitivity; // Horizontal rotation
+    const sensitivity = 0.001;
+     //Horizontal rotation
+    camera.rotation.y -= event.movementX * sensitivity;
+     //Vertical rotation
+    // camera.rotation.x -= event.movementY * sensitivity;  
 
     camera.rotation.x = Math.max(
       -Math.PI / 2,
@@ -101,7 +104,7 @@ function updateMovement() {
   let tempMoveTarget = moveTarget.clone();
   const direction = new THREE.Vector3();
   camera.getWorldDirection(direction);
-  direction.y = 0; // Prevent vertical movement
+  direction.y = 0; 
 
   if (keys["w"]) tempMoveTarget.addScaledVector(direction, moveSpeed);
   if (keys["s"]) tempMoveTarget.addScaledVector(direction, -moveSpeed);
@@ -124,10 +127,10 @@ function updateMovement() {
     moveTarget.copy(tempMoveTarget);
   }
 
-  requestAnimationFrame(updateMovement); // Keep updating movement
+  requestAnimationFrame(updateMovement); 
 }
 
 moveTarget.y = -17;
-updateMovement(); // Start movement loop
+updateMovement(); 
 
 export { moveTarget, moveSpeed };

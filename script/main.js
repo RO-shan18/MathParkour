@@ -1,5 +1,5 @@
 import "./setup.js";
-import "./world.js";
+import "./worldchunk.js";
 import "./model.js";
 import "./equation.js";
 import "./wall.js";
@@ -13,5 +13,7 @@ import "./digwall.js";
 import "./grabUI.js";
 import "./message.js";
 import "./modifyUI.js";
+import "./validposition.js";
+import "./blocks_model.js"
 import "./removeequation.js";
 import "./score.js";

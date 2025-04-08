@@ -5,7 +5,7 @@ import { scene } from "./setup.js";
 function removeanswercubes(){
     answercube.forEach((cube =>{
         scene.remove(cube.mesh);
-    }))
+    })) 
 }
 
 function removeequationcube(){

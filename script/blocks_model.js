@@ -3,28 +3,28 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { collidableobjects, scene, getWorldSize} from "./setup.js";
 import { isPositionValid } from "./validposition.js";
 
-let treePaths = [
-  "tree-pine-small",
-  "tree-pine",
-  "tree",
-  "tree-pine-small",
-];
+let blocks = [
+    "block-grass-corner-low",
+    "block-grass-corner-overhang",
+    "block-grass-corner-overhang-low",
+    "block-grass-corner",
+    "block-grass-curve-half",
+    "block-grass-curve-low",
+  ];
 
 const Loader = new GLTFLoader();
 
 // Load trees using GLTF loader
-function LoadModel(newz, oldz) {
+function BlockModel(newz, oldz) {
   const worldSize = getWorldSize();
-  treePaths.forEach((path) => {
+  blocks.forEach((path) => {
     Loader.load(
       `/Assets/Models/GLB format/${path}.glb`,
       (gltf) => {
-        const tree = gltf.scene;
-        tree.scale.set(3, 3, 3);
-        scene.add(tree);
+        const block = gltf.scene;
+        scene.add(block);
 
-          // Try to find a valid position
-          let position;
+        let position;
           let attempts = 0;
           const maxAttempts = 10;
           
@@ -42,10 +42,10 @@ function LoadModel(newz, oldz) {
             return;
           }
           
-          tree.position.copy(position);
+          block.position.copy(position);
 
         // Bounding box for collision detection
-        const boundingbox = new THREE.Box3().setFromObject(tree);
+        const boundingbox = new THREE.Box3().setFromObject(block);
         collidableobjects.push(boundingbox);
 
           },
@@ -62,4 +62,5 @@ function LoadModel(newz, oldz) {
     );
   };
 
-export { LoadModel };
+
+export { BlockModel };

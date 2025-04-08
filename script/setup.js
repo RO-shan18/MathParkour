@@ -1,11 +1,14 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { setupUIBoxListeners } from "./UI.js";
+
 const minHeight = -16.5;
 let actualresult = 0;
 let collidableobjects = [];
-let worldSize = 100;
+let worldSize = 50;
 let z_cord = 50;
-let playercontrol = "sdfsdf";
+let playercontrol = "";
+const worldChunks = []; // Array to track world chunks
 
 export function getplayercontrol() {
   return playercontrol;
@@ -48,7 +51,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 
 // Camera position
-camera.position.set(32, 0, 32);
+camera.position.set(15, 0, 15);
 camera.lookAt(0, 0, 0);
 
 //renderer setup
@@ -66,10 +69,12 @@ controls.dampingFactor = 0.25;
 const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 directionalLight.position.set(50, 100, camera.position.z + 60);
 directionalLight.castShadow = true;
 scene.add(directionalLight);
 
-export {minHeight, collidableobjects, camera, renderer, scene, worldSize, actualresult, z_cord};
+setupUIBoxListeners();
+
+export {minHeight, collidableobjects, camera, renderer, scene, worldSize, actualresult, z_cord, worldChunks};
 

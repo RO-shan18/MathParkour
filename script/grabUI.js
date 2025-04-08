@@ -16,27 +16,19 @@ function movetoUI() {
       closestDistance = distance;
       closestCube = cube;
       closestIndex = index;
-      setplayercontrol("grab"); 
     }
 
   });
 
-  // If no closest cube is found or it is out of range, return
   if (!closestCube || closestIndex === -1) return;
-
-  // Remove the cube from the Three.js scene
   scene.remove(closestCube.mesh);
-
-  // Remove from answercube array
   answercube.splice(closestIndex, 1);
 
-  // Remove the bounding box from collidableobjects
   const bboxIndex = collidableobjects.indexOf(closestCube.boundingBox);
   if (bboxIndex !== -1) {
-    collidableobjects.splice(bboxIndex, 1);  // Remove the bounding box from collision detection
+    collidableobjects.splice(bboxIndex, 1);  
   }
 
-  // Add the number to the UI (if an empty box is available)
   const uiBoxes = document.querySelectorAll(".ui-box");
   for (let box of uiBoxes) {
     if (!box.hasChildNodes()) {

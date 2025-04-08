@@ -1,12 +1,13 @@
 import * as THREE from "three";
 import { createequationcube, equationCubes } from "./equation.js";
-import { camera, getActualResult, getZCord, setplayercontrol } from "./setup.js";
+import { camera, getActualResult, setplayercontrol } from "./setup.js";
 import { increaseScore, decreaseScore } from "./score.js";
 import { showMessage } from "./message.js";
 import {lowerWalls,  Wallaroundanswercube, wallbehindequationcube, removeWalls } from "./wallcreation.js";
 import { generateanswercube } from "./answer.js";
 import { removeanswercubes, removeequationcube } from "./removeequation.js";
-import { createWorld} from "./world.js";
+import { createWorld } from "./worldchunk.js";
+import { clearSelectedUIBox, getSelectedUIBox } from "./UI.js";
 
 function worldDistance(obj1, obj2) {
     return obj1.position.distanceTo(obj2.position);
@@ -29,28 +30,30 @@ function replaceQuestionCubeWithLastUIValue() {
     }
 
     // Extract the number and color from the last filled UI box
-    const lastValue = lastFilledBox.innerText.trim();
-    const lastColor = window.getComputedStyle(lastFilledBox.firstChild).backgroundColor;
+    const selectedBox = getSelectedUIBox();
+    if (!selectedBox || !selectedBox.hasChildNodes()) {
+        return;
+    }
+
+    const lastValue = selectedBox.innerText.trim();
+    const lastColor = window.getComputedStyle(selectedBox.firstChild).backgroundColor;
 
     if (!lastValue || isNaN(lastValue)) {
         return;
     }
 
-    // Find the '?' cube in the equation
     const questionCube = equationCubes.find(cube => cube.number === "?");
     if (!questionCube) {
         return;
     }
 
-    // Check if player is close to the '?' cube
     const distance = worldDistance(camera, questionCube.mesh);
-
     if (distance > 3) {
-       setplayercontrol("")
+        setplayercontrol("");
         return;
     }
 
-    // Update the texture of the '?' cube
+    // Update the cube texture
     const size = 256;
     const canvas = document.createElement("canvas");
     canvas.width = size;
@@ -72,8 +75,8 @@ function replaceQuestionCubeWithLastUIValue() {
     questionCube.mesh.material.needsUpdate = true;
     questionCube.number = parseInt(lastValue, 10);
 
-    // Remove last filled UI box content
-    lastFilledBox.innerHTML = "";
+    selectedBox.innerHTML = "";
+    clearSelectedUIBox();  // Reset selection after replacement
 
     // Validate the equation
     validateEquation(questionCube);
@@ -97,7 +100,8 @@ function validateEquation(questionCube) {
             createequationcube(); 
             wallbehindequationcube();
             Wallaroundanswercube();
-            generateanswercube();    
+            generateanswercube();  
+            createWorld();  
         }, 5000)
          
 
